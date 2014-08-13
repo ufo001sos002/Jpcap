@@ -1,6 +1,7 @@
 package jpcap;
 
 abstract class JpcapInstance {
+
     protected static final int MAX_NUMBER_OF_INSTANCE = 255;
 
     protected static boolean[] instanciatedFlag = new boolean[MAX_NUMBER_OF_INSTANCE];
