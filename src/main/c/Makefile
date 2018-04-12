@@ -3,7 +3,7 @@
 
 # You should set JAVA_HOME before running 'make'
 # Or, you can manually change the following line, e.g., 'JAVA_DIR = /usr/java/latest'
-JAVA_DIR = $(JAVA_HOME)
+JAVA_DIR = /usr/local/jdk1.7.0_80
 
 JNI_INCLUDE = $(JAVA_DIR)/include
 

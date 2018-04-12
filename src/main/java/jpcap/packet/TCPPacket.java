@@ -146,7 +146,7 @@ public class TCPPacket extends IPPacket {
      * @return a string representation of this packet
      */
     public String toString() {
-        return super.toString() + " TCP " +
+        return super.toString() + "-->TCP " +
                 src_port + " > " + dst_port + " seq(" + sequence +
                 ") win(" + window + ")" + (ack ? " ack " + ack_num : "") + " " +
                 (syn ? " S" : "") + (fin ? " F" : "") + (psh ? " P" : "") +

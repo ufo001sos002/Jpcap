@@ -1,12 +1,16 @@
 package jpcap.api;
 
+import java.io.IOException;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingDeque;
+
 import jpcap.JpcapCaptor;
+import jpcap.NetworkInterface;
 import jpcap.PacketReceiver;
 import jpcap.packet.Packet;
-
-import java.io.IOException;
-import java.net.NetworkInterface;
-import java.util.concurrent.*;
 
 public class Capture implements AutoCloseable {
 
@@ -67,7 +71,7 @@ public class Capture implements AutoCloseable {
     public static Capture fromInterface(NetworkInterface iface) {
         JpcapCaptor captor = null;
         try {
-            captor = JpcapCaptor.openDevice(null, Integer.MAX_VALUE, true, 1000);
+            captor = JpcapCaptor.openDevice(iface, Integer.MAX_VALUE, true, 1000);
         } catch (IOException e) {
             throw new CaptureException(e);
         }

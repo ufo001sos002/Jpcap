@@ -347,6 +347,6 @@ public class ICMPPacket extends IPPacket {
      * @return string representation of this ICMP packet
      */
     public String toString() {
-        return super.toString() + "type(" + type + ") code(" + code + ")";
+        return super.toString() + "-->ICMP type(" + type + ") code(" + code + ")";
     }
 }

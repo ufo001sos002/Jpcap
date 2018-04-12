@@ -108,84 +108,64 @@ public class ARPPacket extends Packet {
     /**
      * Returns the hardware address (MAC address) of the sender.
      *
-     * @return Hardware address of the sender
+     * @return Hardware address of the sender or Unknown Protocol returns to null
      */
-    public Object getSenderHardwareAddress() {
+    public String getSenderHardwareAddress() {
         switch (hardtype) {
             case HARDTYPE_ETHER:
-                char[] adr = new char[17];
-
-                for (int i = 0; i < 5; i++) {
-                    adr[i * 3] = hexUpperChar(sender_hardaddr[i]);
-                    adr[i * 3 + 1] = hexLowerChar(sender_hardaddr[i]);
-                    adr[i * 3 + 2] = ':';
-                }
-                adr[15] = hexUpperChar(sender_hardaddr[5]);
-                adr[16] = hexLowerChar(sender_hardaddr[5]);
-
-                return new String(adr);
+                return hardaddrBytesToHexString(sender_hardaddr);
             default:
-                return "Unknown Protocol";
+                return null;
         }
     }
 
     /**
      * Returns the hardware address (MAC address) of the target.
      *
-     * @return Hardware address of the target
+     * @return Hardware address of the target or Unknown Protocol returns to null
      */
-    public Object getTargetHardwareAddress() {
+    public String getTargetHardwareAddress() {
         switch (hardtype) {
             case HARDTYPE_ETHER:
-                char[] adr = new char[17];
-
-                for (int i = 0; i < 5; i++) {
-                    adr[i * 3] = hexUpperChar(target_hardaddr[i]);
-                    adr[i * 3 + 1] = hexLowerChar(target_hardaddr[i]);
-                    adr[i * 3 + 2] = ':';
-                }
-                adr[15] = hexUpperChar(target_hardaddr[5]);
-                adr[16] = hexLowerChar(target_hardaddr[5]);
-
-                return new String(adr);
+                return hardaddrBytesToHexString(target_hardaddr);
             default:
-                return "Unknown Protocol";
+                return null;
         }
     }
 
     /**
      * Returns the protocol address of the sender.
      *
-     * @return Protocol address of the sender
+     * @return Protocol address of the sender and Unknown Protocol or Unknown Address returns to null
      */
-    public Object getSenderProtocolAddress() {
+    public InetAddress getSenderProtocolAddress() {
         switch (prototype) {
             case PROTOTYPE_IP:
                 try {
                     return InetAddress.getByAddress(sender_protoaddr);
                 } catch (UnknownHostException e) {
-                    return "Unknown Address";
+                    return null;
                 }
             default:
-                return "Unknown Protocol";
+                return null;
         }
     }
 
     /**
-     * Returns the protocol address of the target.
-     *
-     * @return Protocol address of the target
+     * Returns the protocol address of the target.<br>
+     * 
+     * @return Protocol address of the target and Unknown Protocol or Unknown Address returns to null
      */
-    public Object getTargetProtocolAddress() {
+    public InetAddress getTargetProtocolAddress() {
         switch (prototype) {
             case PROTOTYPE_IP:
                 try {
                     return InetAddress.getByAddress(target_protoaddr);
                 } catch (UnknownHostException e) {
-                    return "Unknown Address";
+                    return null;
                 }
             default:
-                return "Unknown Protocol";
+                return null;
         }
     }
 
@@ -228,17 +208,4 @@ public class ARPPacket extends Packet {
                 getTargetHardwareAddress() + "(" + getTargetProtocolAddress() + ")";
     }
 
-    private char hexUpperChar(byte b) {
-        b = (byte) ((b >> 4) & 0xf);
-        if (b == 0) return '0';
-        else if (b < 10) return (char) ('0' + b);
-        else return (char) ('a' + b - 10);
-    }
-
-    private char hexLowerChar(byte b) {
-        b = (byte) (b & 0xf);
-        if (b == 0) return '0';
-        else if (b < 10) return (char) ('0' + b);
-        else return (char) ('a' + b - 10);
-    }
 }

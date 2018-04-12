@@ -74,6 +74,61 @@ public class Packet implements java.io.Serializable {
      * @return a string representation of this packet
      */
     public String toString() {
-        return sec + ":" + usec;
+        return sec + ":" + usec + " datalink:" + datalink.toString() + " ";
+    }
+
+    /**
+     * 转换字节 高位 至 16进制(小写字母)
+     * 
+     * @param b
+     * @return
+     */
+    private char hexUpperChar(byte b) {
+        b = (byte) ((b >> 4) & 0xf);
+        if (b == 0)
+            return '0';
+        else if (b < 10)
+            return (char) ('0' + b);
+        else
+            return (char) ('a' + b - 10);
+    }
+
+    /**
+     * 转换字节 低位 至 16进制(小写字母)
+     * 
+     * @param b
+     * @return
+     */
+    private char hexLowerChar(byte b) {
+        b = (byte) (b & 0xf);
+        if (b == 0)
+            return '0';
+        else if (b < 10)
+            return (char) ('0' + b);
+        else
+            return (char) ('a' + b - 10);
+    }
+
+    /**
+     * 转换6位字节数组 至 00:ff:aa:0a:0f:f0 格式mac地址
+     * 
+     * @param hardaddr length = 6 直接数组
+     * @return mac 字符串形式 参数hardaddr = null or length != 6 则返回null
+     */
+    public String hardaddrBytesToHexString(byte[] hardaddr) {
+        if (hardaddr == null || hardaddr.length != 6) {
+            return null;
+        }
+        char[] adr = new char[17];
+
+        for (int i = 0; i < 5; i++) {
+            adr[i * 3] = hexUpperChar(hardaddr[i]);
+            adr[i * 3 + 1] = hexLowerChar(hardaddr[i]);
+            adr[i * 3 + 2] = ':';
+        }
+        adr[15] = hexUpperChar(hardaddr[5]);
+        adr[16] = hexLowerChar(hardaddr[5]);
+
+        return new String(adr);
     }
 }

@@ -301,6 +301,7 @@ public class IPPacket extends Packet {
         return dst_ip.getAddress();
     }
 
+
     /**
      * Returns a string represenation of this packet.
      * <p/>
@@ -314,18 +315,29 @@ public class IPPacket extends Packet {
      * @return a string represenation of this packet
      */
     public String toString() {
+        String dst_mac = "Unknown mac";
+        String src_mac = "Unknown mac";
+        if (datalink instanceof EthernetPacket) {
+            EthernetPacket eth = (EthernetPacket) datalink;
+            dst_mac = hardaddrBytesToHexString(eth.dst_mac);
+            src_mac = hardaddrBytesToHexString(eth.src_mac);
+        }
         if (version == 4) {
-            return super.toString() + " " + src_ip + "->" + dst_ip
+            return super.toString() + " src: " + src_ip + "(" + src_mac.toString() + ")"
+                    + "--> dst: " + dst_ip
+                    + "(" + dst_mac.toString() + ")" 
                     + " protocol(" + protocol + ") priority(" + priority + ") "
                     + (d_flag ? "D" : "") + (t_flag ? "T" : "")
                     + (r_flag ? "R" : "") + " hop(" + hop_limit + ") "
                     + (rsv_frag ? "RF/" : "") + (dont_frag ? "DF/" : "")
                     + (more_frag ? "MF" : "") + " offset(" + offset
-                    + ") ident(" + ident + ")";
+                    + ") ident(" + ident + ") IP";
         } else {
-            return super.toString() + " " + src_ip + "->" + dst_ip
+            return super.toString() + " src: " + src_ip + "(" + src_mac.toString() + ")"
+                    + "--> dst :" + dst_ip
+                    + "(" + dst_mac.toString() + ")" 
                     + " protocol(" + protocol + ") priority(" + priority
-                    + ") flowlabel(" + flow_label + ") hop(" + hop_limit + ")";
+                    + ") flowlabel(" + flow_label + ") hop(" + hop_limit + ") IP";
         }
     }
 }
